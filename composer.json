@@ -1,0 +1,33 @@
+{
+  "name": "nattreid/calendar",
+  "description": "Calendar for Nette Framework",
+  "type": "library",
+  "license": [
+	"MIT"
+  ],
+  "authors": [
+	{
+	  "name": "Attreid",
+	  "email": "attreid@gmail.com"
+	}
+  ],
+  "require": {
+	"php": ">= 7.1",
+	"ext-calendar": "*",
+	"nette/application": "~2.4"
+  },
+  "require-dev": {
+	"nette/tester": "~1.7",
+	"tracy/tracy": "~2.4"
+  },
+  "autoload": {
+	"classmap": [
+	  "src/"
+	]
+  },
+  "extra": {
+	"branch-alias": {
+	  "dev-master": "1.x-dev"
+	}
+  }
+}

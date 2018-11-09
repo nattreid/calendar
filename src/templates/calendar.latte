@@ -1,0 +1,22 @@
+<div class="nattreid-calendar">
+    <table>
+        <thead>
+        <tr>
+            <th n:foreach="$days as $day">{$day}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach $date as $day}
+            {if $day->firstOfWeek}<tr>{/if}
+            <td n:class="$day->prevMonth ? prevMonth, $day->nextMonth ? nextMonth">
+                {if ($day->prevMonth || $day->nextMonth) && !$showOtherDays}
+
+                {else}
+                    {$day->day}
+                {/if}
+            </td>
+            {if $day->lastOfWeek}</tr>{/if}
+        {/foreach}
+        </tbody>
+    </table>
+</div>
