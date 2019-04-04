@@ -1,22 +1,25 @@
-<div class="nattreid-calendar">
-    <div class="month" n:foreach="$dateIterator as $date">
+<div class="nattreid-calendar" data-handler="{link changeMonth}" n:snippet="container">
+    <a class="prev">{$config->prev}</a>
+    <div class="month" n:foreach="$months as $month">
+        <div class="monthName" n:if="$config->showMonth || $sconfig->howYear">{$month->name} {$month->year}</div>
         <div class="nameOfDays">
-            <span class="nameOfDay cell" n:foreach="$days as $day">
+            <span class="nameOfDay cell" n:foreach="$daysOfWeek as $day">
                 {$day}
             </span>
         </div>
         <div class="days">
-            {foreach $date as $day}
-                {if $day->firstOfWeek}<div class="week">{/if}
-                    <span n:class="day, cell , $day->prevMonth ? prevMonth, $day->nextMonth ? nextMonth">
-                        {if ($day->prevMonth || $day->nextMonth) && !$showOtherDays}
+            {foreach $month as $day}
+                <span n:class="day, cell, $day->otherMonth ? otherMonth, $day->hidden ? hidden, $day->current ? current, $day->disabled ? disabled" data-date="{$day->formatDate}">
+                    {if $day->hidden}
 
-                        {else}
-                            {$day->day}
-                        {/if}
-                    </span>
-                {if $day->lastOfWeek}</div>{/if}
+                    {elseif $config->dayTemplate !== null}
+                        {include $config->dayTemplate, day => $day, (expand) $config->dayTemplateArgs}
+                    {else}
+                        {$day->render()}
+                    {/if}
+                </span>
             {/foreach}
         </div>
     </div>
+    <a class="next">{$next}</a>
 </div>

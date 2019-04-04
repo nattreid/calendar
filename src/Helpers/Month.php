@@ -2,41 +2,58 @@
 
 declare(strict_types=1);
 
-namespace Nattreid\Calendar;
+namespace Nattreid\Calendar\Helpers;
 
 use DateTimeImmutable;
+use DateTimeInterface;
 use Iterator;
+use Nette\SmartObject;
 
 /**
  * Class DateIterator
  *
+ * @property-read string $name
+ * @property-read int $year
+ *
  * @author Attreid <attreid@gmail.com>
  */
-class DateIterator implements Iterator
+class Month implements Iterator
 {
+	use SmartObject;
 
 	/** @var string */
 	private $format = 'Y-m-d';
 
+	/** @var Config */
+	private $config;
+
 	/** @var DateTimeImmutable */
 	private $date, $first, $last, $current;
 
-	/** @var int */
-	private $firstDayOfWeek;
-
-	public function __construct(DateTimeImmutable $date, int $firstDayOfWeek)
+	public function __construct(Config $config, DateTimeImmutable $date)
 	{
+		$this->config = $config;
 		$this->date = $date;
-		$this->firstDayOfWeek = $firstDayOfWeek;
 
 		$this->current = $this->first = $this->getFirstDay();
 		$this->last = $this->getLastDay();
 	}
 
+	protected function getName(): string
+	{
+		$month = $this->date->format('n') - 1;
+		return $this->config->translator->translate('nattreid.calendar.months.' . $month);
+	}
+
+	protected function getYear(): int
+	{
+		return (int) $this->date->format('Y');
+	}
+
 	private function getFirstDayOfWeek(): string
 	{
 		$days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-		return $days[$this->firstDayOfWeek];
+		return $days[$this->config->firstDayOfWeek];
 	}
 
 	private function getDaysOfMonth(): int
@@ -72,7 +89,7 @@ class DateIterator implements Iterator
 	 */
 	public function current()
 	{
-		return new Date($this->current, $this->date, $this->firstDayOfWeek);
+		return new Day($this->config, $this->current, $this->date);
 	}
 
 	/**
