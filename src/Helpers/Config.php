@@ -15,7 +15,7 @@ use Nette\SmartObject;
 /**
  * Class Config
  *
- * @property ITranslator $translator
+ * @property Translator $translator
  * @property DateTimeImmutable $current
  * @property int $firstDayOfWeek
  * @property int $numberOfMonths
@@ -92,7 +92,7 @@ class Config
 	/** @var array */
 	private $dayTemplateArgs = [];
 
-	protected function getTranslator(): ITranslator
+	protected function getTranslator(): Translator
 	{
 		return $this->translator;
 	}
@@ -236,7 +236,6 @@ class Config
 			}
 			$this->disabled[$date->format('Y-m-d')] = $date;
 		}
-		$this->disabled = $disabled;
 	}
 
 	protected function getDayRenderer(): ?callable

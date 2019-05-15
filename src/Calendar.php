@@ -6,8 +6,9 @@ namespace Nattreid\Calendar;
 
 use DateTimeInterface;
 use Nattreid\Calendar\Helpers\Config;
-use Nattreid\Calendar\Helpers\Day;
 use Nattreid\Calendar\Helpers\Month;
+use NAttreid\Calendar\Lang\Translator;
+use Nette\Application\AbortException;
 use Nette\Application\UI\Control;
 use Nette\Localization\ITranslator;
 
@@ -93,7 +94,7 @@ class Calendar extends Control
 		return $this;
 	}
 
-	public function getTranslator(): ITranslator
+	public function getTranslator(): Translator
 	{
 		return $this->config->translator;
 	}
@@ -121,16 +122,19 @@ class Calendar extends Control
 	{
 		$days = [];
 		for ($i = 0; $i < 7; $i++) {
-			$days[] = $this->translator->translate('nattreid.calendar.days.' . (($i + $this->config->firstDayOfWeek) % 7));
+			$days[] = $this->config->translator->translate('nattreid.calendar.days.' . (($i + $this->config->firstDayOfWeek) % 7));
 		}
 		return $days;
 	}
 
+	/**
+	 * @throws AbortException
+	 */
 	public function handleChangeMonth(): void
 	{
 		$position = (int) $this->presenter->getRequest()->getParameter('nattreidCalendarPosition');
 		if ($this->presenter->isAjax()) {
-			if ($position >= 0) {
+			if (!$this->config->disableBeforeCurrent || $position >= 0) {
 				$this->config->offset = $position;
 				$this->redrawControl('container');
 			}
@@ -141,6 +145,7 @@ class Calendar extends Control
 
 	public function render(): void
 	{
+		$this->template->name = $this->name;
 		$this->template->addFilter('translate', [$this->config->translator, 'translate']);
 
 		$this->template->config = $this->config;
@@ -149,7 +154,7 @@ class Calendar extends Control
 		$months = [];
 		for ($i = $this->config->offset; $i < $this->config->numberOfMonths + $this->config->offset; $i++) {
 			$date = $this->config->current;
-			if ($i > 0) {
+			if ($i !== 0) {
 				$date = $date->modify($i . ' MONTH');
 			}
 			$months[] = new Month($this->config, $date);

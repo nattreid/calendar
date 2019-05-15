@@ -1,25 +1,33 @@
-<div class="nattreid-calendar" data-handler="{link changeMonth}" n:snippet="container">
-    <a class="prev">{$config->prev}</a>
-    <div class="month" n:foreach="$months as $month">
-        <div class="monthName" n:if="$config->showMonth || $sconfig->howYear">{$month->name} {$month->year}</div>
-        <div class="nameOfDays">
+<div id="{$name}">
+    <div class="nattreid-calendar" n:snippet="container"
+         data-handler="{link changeMonth}"
+         data-disable-before-current="{$config->disableBeforeCurrent ? 1 : 0}">
+        <a class="prev">{$config->prev}</a>
+        <div class="month" n:foreach="$months as $month">
+            {var $isInner = !$iterator->isFirst() && !$iterator->isLast()}
+            {var $isFirst = $iterator->isFirst()}
+            {var $isLast = $iterator->isLast()}
+            <div class="monthName" n:if="$config->showMonth || $sconfig->howYear">{$month->name} {$month->year}</div>
+            <div class="nameOfDays">
             <span class="nameOfDay cell" n:foreach="$daysOfWeek as $day">
                 {$day}
             </span>
-        </div>
-        <div class="days">
-            {foreach $month as $day}
-                <span n:class="day, cell, $day->otherMonth ? otherMonth, $day->hidden ? hidden, $day->current ? current, $day->disabled ? disabled" data-date="{$day->formatDate}">
-                    {if $day->hidden}
-
+            </div>
+            <div class="days">
+                {foreach $month as $day}
+                    {var $hidden = $day->hidden || ($isInner && $day->otherMonth) || ($isFirst &&$day->nextMonth) || ($isLast && $day->prevMonth)}
+                    <span n:class="day, cell, $day->otherMonth ? otherMonth, $hidden ? hiddenCell, $day->current ? current, $day->disabled ? disabled" data-date="{$day->formatDate}">
+                    {if $hidden}
+                        &nbsp;
                     {elseif $config->dayTemplate !== null}
                         {include $config->dayTemplate, day => $day, (expand) $config->dayTemplateArgs}
                     {else}
                         {$day->render()}
                     {/if}
                 </span>
-            {/foreach}
+                {/foreach}
+            </div>
         </div>
+        <a class="next">{$config->next}</a>
     </div>
-    <a class="next">{$next}</a>
 </div>

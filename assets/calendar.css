@@ -5,14 +5,10 @@
   background: #fff;
   box-shadow: 1px 0 0 #e6e6e6, -1px 0 0 #e6e6e6, 0 1px 0 #e6e6e6, 0 -1px 0 #e6e6e6, 0 3px 13px rgba(0, 0, 0, 0.08);
   font-size: 0;
-}
-.nattreid-calendar .cell {
-  display: inline-block;
-  line-height: calc(30px - 1px);
-  width: 30px;
-  height: 30px;
-  text-align: center;
-  font-size: 14px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .nattreid-calendar > a {
   cursor: pointer;
@@ -26,8 +22,17 @@
 }
 .nattreid-calendar .month {
   display: inline-block;
+  vertical-align: top;
   margin: 0 10px;
   width: calc(30px * 7);
+}
+.nattreid-calendar .month .cell {
+  display: inline-block;
+  line-height: calc(30px - 1px);
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  font-size: 14px;
 }
 .nattreid-calendar .month .monthName {
   text-align: center;
@@ -49,13 +54,27 @@
   cursor: not-allowed;
   color: #ccc;
 }
-.nattreid-calendar .month .days .day.prevMonth,
-.nattreid-calendar .month .days .day.nextMonth {
+.nattreid-calendar .month .days .day.otherMonth {
   color: #666;
+}
+.nattreid-calendar .month .days .day.hiddenCell {
+  border-color: #fff !important;
+  cursor: initial;
 }
 .nattreid-calendar .month .days .day:hover {
   border-color: #ccc;
 }
 .nattreid-calendar .month .days .day.current {
   border-color: #eee;
+}
+.nattreid-calendar .month .days .day.selected {
+  font-weight: bold;
+  color: #00a1ee;
+  border-color: #00a1ee;
+  background-color: #e4f1ff;
+}
+.nattreid-calendar .month .days .day.selection {
+  color: #6ac9f3;
+  border-color: #6ac9f3;
+  background-color: #f2f8ff;
 }

@@ -1,63 +1,123 @@
-var NattreidCalendar = new function () {
-    var position = 0;
-    var selected = [];
-
-    function callAjax() {
-        $.nette.ajax({
-            url: $('.nattreid-calendar').data('handler'),
-            data: {
-                nattreidCalendarPosition: position
-            }
-        });
+(function ($, window) {
+    if (window.jQuery === undefined) {
+        console.error('Plugin "jQuery" required by "Nattreid/Calendar" is missing!');
+        return;
     }
 
-    function select(obj) {
-        var date = obj.data('date');
-        switch (selected.length) {
-            default:
-                selected = [];
-            case 0:
-                selected.push(obj.data('date'));
-                break;
-            case 1:
-                if (selected[0] > date) {
-                    selected = [date, selected[0]];
-                } else {
-                    selected.push(date);
+    $.fn.nattreidCalendar = function () {
+        var _this = $(this);
+        var handler = $(this).find('.nattreid-calendar').data('handler');
+        var disableBeforeCurrent = $(this).find('.nattreid-calendar').data('disable-before-current');
+        var position = 0;
+        var selected = [];
+
+        this.getValue = function () {
+            return selected;
+        };
+
+        function callAjax() {
+            $.nette.ajax({
+                url: handler,
+                data: {
+                    nattreidCalendarPosition: position
                 }
+            }).done(function () {
+                selected.forEach(function (item) {
+                    get(item).addClass('selected');
+                });
+                var selection = getSelection(selected);
+                if (selection) {
+                    selection.addClass('selection');
+                }
+            });
         }
-        obj.addClass('selected');
-    }
 
-    function deselect(obj) {
-        obj.removeClass('selected');
-    }
+        function get(selector) {
+            return _this.find('.nattreid-calendar .day[data-date="' + selector + '"]');
+        }
 
-    $(document).ready(function () {
+        function select(obj) {
+            var date = obj.data('date');
+            switch (selected.length) {
+                default:
+                case 2:
+                    deselect();
+                case 0:
+                    selected.push(date);
+                    obj.addClass('selected');
+                    break;
+                case 1:
+                    var arr = selected.slice();
+                    if (arr[0] > date) {
+                        arr = [date, arr[0]];
+                    } else {
+                        arr.push(date);
+                    }
+                    var selection = getSelection(arr);
+                    if (selection) {
+                        selection.addClass('selection');
+                        obj.addClass('selected');
+                        selected = arr;
+                    }
+                    break;
+            }
+        }
 
-        $(document).on('click', '.nattreid-calendar a.prev', function () {
-            if (position > 0) {
+        function getSelection(date) {
+            var selection;
+            var first = get(date[0]);
+            var second = get(date[1]);
+
+            if (first.parent().is(second.parent())) {
+                selection = first.nextUntil(second);
+            } else {
+                var other = first.closest('.month').nextUntil(second.closest('.month')).find('.day');
+                selection = first.nextAll().add(other).add(second.prevAll());
+            }
+            selection = selection.not('.hiddenCell');
+
+            if (!selection.hasClass('disabled')) {
+                return selection;
+            }
+            return false;
+        }
+
+        function deselect(obj) {
+            _this.find('.nattreid-calendar .day').removeClass('selection');
+            var items = [];
+
+            if (obj != null) {
+                selected.forEach(function (item) {
+                    if (obj.is(get(item))) {
+                        obj.removeClass('selected');
+                    } else {
+                        items.push(item);
+                    }
+                });
+            } else {
+                selected.forEach(function (item) {
+                    get(item).removeClass('selected');
+                });
+            }
+
+            selected = items;
+        }
+
+        $(this).on('click', '.nattreid-calendar a.prev', function () {
+            if (!disableBeforeCurrent || position > 0) {
                 --position;
                 callAjax();
             }
             return false;
         });
 
-        $(document).on('click', '.nattreid-calendar a.next', function () {
+        $(this).on('click', '.nattreid-calendar a.next', function () {
             position++;
             callAjax();
             return false;
         });
 
-        $(document).on('click', '.nattreid-calendar a.prev', function () {
-            if (position > 0) {
-                --position;
-                callAjax();
-            }
-            return false;
-        });
-
-        $(document).on('click', '.nattreid-calendar .day', function () {
+        $(this).on('click', '.nattreid-calendar .day', function () {
             var obj = $(this);
             if (!obj.hasClass('disabled')) {
                 if (obj.hasClass('selected')) {
@@ -67,6 +127,9 @@ var NattreidCalendar = new function () {
                 }
             }
         });
-    });
-};
+
+        return this;
+    };
+
+})(jQuery, window);
 

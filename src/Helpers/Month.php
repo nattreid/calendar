@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Nattreid\Calendar\Helpers;
 
 use DateTimeImmutable;
-use DateTimeInterface;
 use Iterator;
 use Nette\SmartObject;
 
@@ -14,6 +13,7 @@ use Nette\SmartObject;
  *
  * @property-read string $name
  * @property-read int $year
+ * @property-read DateTimeImmutable $default
  *
  * @author Attreid <attreid@gmail.com>
  */
@@ -28,12 +28,12 @@ class Month implements Iterator
 	private $config;
 
 	/** @var DateTimeImmutable */
-	private $date, $first, $last, $current;
+	private $default, $first, $last, $current;
 
-	public function __construct(Config $config, DateTimeImmutable $date)
+	public function __construct(Config $config, DateTimeImmutable $default)
 	{
 		$this->config = $config;
-		$this->date = $date;
+		$this->default = $default;
 
 		$this->current = $this->first = $this->getFirstDay();
 		$this->last = $this->getLastDay();
@@ -41,13 +41,18 @@ class Month implements Iterator
 
 	protected function getName(): string
 	{
-		$month = $this->date->format('n') - 1;
+		$month = $this->default->format('n') - 1;
 		return $this->config->translator->translate('nattreid.calendar.months.' . $month);
 	}
 
 	protected function getYear(): int
 	{
-		return (int) $this->date->format('Y');
+		return (int) $this->default->format('Y');
+	}
+
+	protected function getDefault(): DateTimeImmutable
+	{
+		return $this->default;
 	}
 
 	private function getFirstDayOfWeek(): string
@@ -58,15 +63,15 @@ class Month implements Iterator
 
 	private function getDaysOfMonth(): int
 	{
-		return cal_days_in_month(CAL_GREGORIAN, (int) $this->date->format('m'), (int) $this->date->format('Y'));
+		return cal_days_in_month(CAL_GREGORIAN, (int) $this->default->format('m'), (int) $this->default->format('Y'));
 	}
 
 	private function getFirstDay(): DateTimeImmutable
 	{
 		$day = $this->getFirstDayOfWeek();
-		$date = $this->date->modify("first $day of this month");
+		$date = $this->default->modify("first $day of this month");
 		if ((int) $date->format('j') !== 1) {
-			$date = $this->date->modify("last $day of previous month");
+			$date = $this->default->modify("last $day of previous month");
 		}
 		return $date;
 	}
@@ -74,9 +79,9 @@ class Month implements Iterator
 	private function getLastDay(): DateTimeImmutable
 	{
 		$day = $this->getFirstDayOfWeek();
-		$date = $this->date->modify("last $day of this month");
+		$date = $this->default->modify("last $day of this month");
 		if ((int) $date->format('j') !== $this->getDaysOfMonth()) {
-			$date = $this->date->modify("first $day of next month");
+			$date = $this->default->modify("first $day of next month");
 		}
 		return $date;
 	}
@@ -89,7 +94,7 @@ class Month implements Iterator
 	 */
 	public function current()
 	{
-		return new Day($this->config, $this->current, $this->date);
+		return new Day($this->config, $this, $this->current);
 	}
 
 	/**

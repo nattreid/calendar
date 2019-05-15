@@ -15,6 +15,8 @@ use Nette\SmartObject;
  * @property-read int $day
  * @property-read bool $firstOfWeek
  * @property-read bool $lastOfWeek
+ * @property-read bool $prevMonth
+ * @property-read bool $nextMonth
  * @property-read bool $otherMonth
  * @property-read bool $current
  * @property-read bool $disabled
@@ -29,14 +31,17 @@ class Day
 	/** @var Config */
 	private $config;
 
-	/** @var DateTimeImmutable */
-	private $date, $default;
+	/** @var Month */
+	private $month;
 
-	public function __construct(Config $config, DateTimeImmutable $date, DateTimeImmutable $default)
+	/** @var Month */
+	private $date;
+
+	public function __construct(Config $config, Month $month, DateTimeImmutable $date)
 	{
 		$this->config = $config;
+		$this->month = $month;
 		$this->date = $date;
-		$this->default = $default;
 	}
 
 	protected function getDate(): DateTimeImmutable
@@ -59,9 +64,19 @@ class Day
 		return (int) $this->date->format('w') === ($this->config->firstDayOfWeek + 6) % 7;
 	}
 
+	protected function isPrevMonth(): bool
+	{
+		return (int) $this->date->format('n') < (int) $this->month->default->format('n');
+	}
+
+	protected function isNextMonth(): bool
+	{
+		return (int) $this->date->format('n') > (int) $this->month->default->format('n');
+	}
+
 	protected function isOtherMonth(): bool
 	{
-		return (int) $this->date->format('n') !== (int) $this->default->format('n');
+		return $this->prevMonth || $this->nextMonth;
 	}
 
 	protected function isCurrent(): bool

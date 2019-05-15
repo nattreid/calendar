@@ -1,5 +1,8 @@
 @size: 30px;
-
+@selectedColor: #00a1ee;
+@selectedBackgroundColor: #e4f1ff;
+@selectionColor: #6ac9f3;
+@selectionBackgroundColor: #f2f8ff;
 
 .nattreid-calendar {
   display: inline-block;
@@ -9,14 +12,10 @@
   box-shadow: 1px 0 0 #e6e6e6, -1px 0 0 #e6e6e6, 0 1px 0 #e6e6e6, 0 -1px 0 #e6e6e6, 0 3px 13px rgba(0, 0, 0, .08);
   font-size: 0;
 
-  .cell {
-    display: inline-block;
-    line-height: calc(@size - 1px);
-    width: @size;
-    height: @size;
-    text-align: center;
-    font-size: 14px;
-  }
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 
   > a {
     cursor: pointer;
@@ -31,8 +30,18 @@
 
   .month {
     display: inline-block;
+    vertical-align: top;
     margin: 0 10px;
     width: calc(@size * 7);
+
+    .cell {
+      display: inline-block;
+      line-height: calc(@size - 1px);
+      width: @size;
+      height: @size;
+      text-align: center;
+      font-size: 14px;
+    }
 
     .monthName {
       text-align: center;
@@ -64,8 +73,9 @@
           color: #666;
         }
 
-        &.hidden {
-
+        &.hiddenCell {
+          border-color: #fff !important;
+          cursor: initial;
         }
 
         &:hover {
@@ -77,7 +87,16 @@
         }
 
         &.selected {
+          font-weight: bold;
+          color: @selectedColor;
+          border-color: @selectedColor;
+          background-color: @selectedBackgroundColor;
+        }
 
+        &.selection {
+          color: @selectionColor;
+          border-color: @selectionColor;
+          background-color: @selectionBackgroundColor;
         }
       }
     }
