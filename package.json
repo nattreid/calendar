@@ -1,24 +1,24 @@
 {
- "name": "nattreid-calendar",
- "description": "Calendar for Nette Framework",
- "version": "1.0.0",
- "main": "./assets/calendar.js",
- "repository": {
-  "type": "git",
-  "url": "git@github.com:nattreid/calendar.git"
- },
- "author": "Attreid",
- "license": "MIT",
- "dependencies": {
-  "jquery": "~3.4",
-  "font-awesome": "~4.7",
-  "nette.ajax.js": "~2.3"
- },
- "devDependencies": {
-  "gulp": "^4.0.1",
-  "gulp-clean-css": "~3.10",
-  "gulp-concat": "~2.6",
-  "gulp-less": "~4.0",
-  "gulp-uglify": "~3.0"
- }
+  "name": "nattreid-calendar",
+  "description": "Calendar for Nette Framework",
+  "version": "1.0.0",
+  "main": "./assets/calendar.js",
+  "repository": {
+	"type": "git",
+	"url": "git@github.com:nattreid/calendar.git"
+  },
+  "author": "Attreid",
+  "license": "MIT",
+  "dependencies": {
+	"jquery": "~3.4",
+	"font-awesome": "~4.7",
+	"nette.ajax.js": "~2.3"
+  },
+  "devDependencies": {
+	"gulp": "^4.0.1",
+	"gulp-clean-css": "~3.10",
+	"gulp-concat": "~2.6",
+	"gulp-less": "~4.0",
+	"gulp-uglify": "~3.0"
+  }
 }
