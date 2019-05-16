@@ -50,12 +50,12 @@
   border-radius: 4px;
   border: 1px solid #fff;
 }
+.nattreid-calendar .month .days .day.otherMonth {
+  color: #666;
+}
 .nattreid-calendar .month .days .day.disabled {
   cursor: not-allowed;
   color: #ccc;
-}
-.nattreid-calendar .month .days .day.otherMonth {
-  color: #666;
 }
 .nattreid-calendar .month .days .day.hiddenCell {
   border-color: #fff !important;

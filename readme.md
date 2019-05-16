@@ -28,3 +28,18 @@ protected function createComponentCalendar(): \Nattreid\Calendar\Calendar
     return $calendar;
 }
 ```
+
+```javascript
+function parseDate(date) {
+    return date.getDate() + '.' + date.getMonth() + '.' + date.getFullYear();
+}
+
+var calendar = $('#calendar').nattreidCalendar({
+    onSelected: function (selected) {
+        $('form input[name="from"]').val(parseDate(selected[0]));
+        $('form input[name="to"]').val(parseDate(selected[1]));
+    }
+});
+
+var selectedDates = calendar.getSelected();
+```

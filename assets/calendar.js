@@ -4,16 +4,32 @@
         return;
     }
 
-    $.fn.nattreidCalendar = function () {
+    $.fn.nattreidCalendar = function (options) {
         var _this = $(this);
         var handler = $(this).find('.nattreid-calendar').data('handler');
         var disableBeforeCurrent = $(this).find('.nattreid-calendar').data('disable-before-current');
         var position = 0;
         var selected = [];
 
-        this.getValue = function () {
-            return selected;
-        };
+        var opts = $.extend({}, {
+            onSelected: function (selected) {
+            }
+        }, options);
+
+        this.getSelected = getSelected;
+
+        function getSelected() {
+            var result = [];
+            selected.forEach(function (date) {
+                var parts = date.split('-');
+
+                result.push(new Date(parseInt(parts[0], 10),
+                    parseInt(parts[1], 10) - 1,
+                    parseInt(parts[2], 10)));
+            });
+
+            return result;
+        }
 
         function callAjax() {
             $.nette.ajax({
@@ -59,6 +75,7 @@
                         obj.addClass('selected');
                         selected = arr;
                     }
+                    opts.onSelected(getSelected());
                     break;
             }
         }
