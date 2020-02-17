@@ -16,14 +16,23 @@
             <div class="days">
                 {foreach $month as $day}
                     {var $hidden = $day->hidden || ($isInner && $day->otherMonth) || ($isFirst &&$day->nextMonth) || ($isLast && $day->prevMonth)}
-                    <span n:class="day, cell, $day->otherMonth ? otherMonth, $hidden ? hiddenCell, $day->current ? current, $day->disabled ? disabled" data-date="{$day->formatDate}">
-                    {if $hidden}
-                        &nbsp;
-                    {elseif $config->dayTemplate !== null}
-                        {include $config->dayTemplate, day => $day, (expand) $config->dayTemplateArgs}
-                    {else}
-                        {$day->render()}
-                    {/if}
+                    <span n:class="
+                        day,
+                        cell,
+                        $day->otherMonth ? otherMonth,
+                        $hidden ? hiddenCell,
+                        $day->current ? current,
+                        $day->disabled ? disabled,
+                        $day->is($config->from) || $day->is($config->to) ? selected,
+                        $day->less($config->from) && $day->more($config->to) ? selection
+                        " data-date="{$day->formatDate}">{dump $config->from === $day->current}{dump $config->from}{dump $config->current}
+                        {if $hidden}
+                            &nbsp;
+                        {elseif $config->dayTemplate !== null}
+                            {include $config->dayTemplate, day => $day, (expand) $config->dayTemplateArgs}
+                        {else}
+                            {$day->render()}
+                        {/if}
                 </span>
                 {/foreach}
             </div>

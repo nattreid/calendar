@@ -118,6 +118,12 @@ class Calendar extends Control
 		return $this;
 	}
 
+	public function setSelected(DateTimeInterface $from, DateTimeInterface $to): void
+	{
+		$this->config->from = $from;
+		$this->config->to = $to;
+	}
+
 	private function getDaysOfWeek(): array
 	{
 		$days = [];

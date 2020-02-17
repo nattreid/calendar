@@ -17,6 +17,8 @@ use Nette\SmartObject;
  *
  * @property Translator $translator
  * @property DateTimeImmutable $current
+ * @property DateTimeImmutable $from
+ * @property DateTimeImmutable $to
  * @property int $firstDayOfWeek
  * @property int $numberOfMonths
  * @property int $offset
@@ -47,8 +49,14 @@ class Config
 	/** @var ITranslator */
 	private $translator;
 
-	/** @var DateTimeInterface */
+	/** @var DateTimeImmutable */
 	private $current;
+
+	/** @var DateTimeImmutable */
+	private $from;
+
+	/** @var DateTimeImmutable */
+	private $to;
 
 	/** @var int */
 	private $firstDayOfWeek = 0;
@@ -114,6 +122,34 @@ class Config
 	protected function getCurrent(): DateTimeImmutable
 	{
 		return $this->current;
+	}
+
+	protected function getFrom(): DateTimeInterface
+	{
+		return $this->from;
+	}
+
+	protected function setFrom(DateTimeInterface $date): void
+	{
+		if ($date instanceof DateTime) {
+			$this->from = DateTimeImmutable::createFromMutable($date);
+		} else {
+			$this->from = $date;
+		}
+	}
+
+	protected function getTo(): DateTimeInterface
+	{
+		return $this->to;
+	}
+
+	protected function setTo(DateTimeInterface $date): void
+	{
+		if ($date instanceof DateTime) {
+			$this->to = DateTimeImmutable::createFromMutable($date);
+		} else {
+			$this->to = $date;
+		}
 	}
 
 	protected function getFirstDayOfWeek(): int

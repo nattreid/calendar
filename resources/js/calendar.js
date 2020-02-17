@@ -11,6 +11,10 @@
         var position = 0;
         var selected = [];
 
+        _this.find('.nattreid-calendar .day.selected').each(function(index, item){
+            selected.push($(item).data('date'));
+        });
+
         var opts = $.extend({}, {
             onSelected: function (selected) {
             }

@@ -6,6 +6,7 @@ namespace Nattreid\Calendar\Helpers;
 
 use DateTimeImmutable;
 use Nette\SmartObject;
+use DateTimeInterface;
 
 /**
  * Class Date
@@ -34,7 +35,7 @@ class Day
 	/** @var Month */
 	private $month;
 
-	/** @var Month */
+	/** @var DateTimeImmutable */
 	private $date;
 
 	public function __construct(Config $config, Month $month, DateTimeImmutable $date)
@@ -42,6 +43,11 @@ class Day
 		$this->config = $config;
 		$this->month = $month;
 		$this->date = $date;
+	}
+
+	private function format(DateTimeImmutable $date): string
+	{
+		return $date->format('Y-m-d');
 	}
 
 	protected function getDate(): DateTimeImmutable
@@ -81,15 +87,15 @@ class Day
 
 	protected function isCurrent(): bool
 	{
-		return $this->date->format('Y-m-d') === $this->config->current->format('Y-m-d');
+		return $this->is($this->config->current);
 	}
 
 	protected function isDisabled(): bool
 	{
-		if ($this->config->disableBeforeCurrent && $this->config->current->format('Y-m-d') > $this->date->format('Y-m-d')) {
+		if ($this->config->disableBeforeCurrent && $this->more($this->config->current)) {
 			return true;
 		}
-		return isset($this->config->disabled[$this->date->format('Y-m-d')]);
+		return isset($this->config->disabled[$this->format($this->date)]);
 	}
 
 	protected function isHidden(): bool
@@ -109,5 +115,20 @@ class Day
 			return $func($this);
 		}
 		return (string) $this->day;
+	}
+
+	public function is(DateTimeInterface $date): bool
+	{
+		return $this->format($date) === $this->format($this->date);
+	}
+
+	public function less(DateTimeInterface $date): bool
+	{
+		return $this->format($date) < $this->format($this->date);
+	}
+
+	public function more(DateTimeInterface $date): bool
+	{
+		return $this->format($date) > $this->format($this->date);
 	}
 }
