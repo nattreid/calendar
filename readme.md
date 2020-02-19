@@ -13,6 +13,7 @@ protected function createComponentCalendar(): \Nattreid\Calendar\Calendar
         ->setNumberOfMonths(3)
         ->setFormat('Y-m-d')
         ->disableBeforeCurrent()
+        ->setSelected(new DateTime, (new DateTime)->modify('+ 1 day'))
         ->setDisabledDays([
             (new DateTime)->modify('+ 1 day'),
             (new DateTime)->modify('+ 7 day'),
