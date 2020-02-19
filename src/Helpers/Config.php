@@ -17,8 +17,8 @@ use Nette\SmartObject;
  *
  * @property Translator $translator
  * @property DateTimeImmutable $current
- * @property DateTimeImmutable $from
- * @property DateTimeImmutable $to
+ * @property DateTimeImmutable|null $from
+ * @property DateTimeImmutable|null $to
  * @property int $firstDayOfWeek
  * @property int $numberOfMonths
  * @property int $offset
@@ -124,7 +124,7 @@ class Config
 		return $this->current;
 	}
 
-	protected function getFrom(): DateTimeInterface
+	protected function getFrom(): ?DateTimeInterface
 	{
 		return $this->from;
 	}
@@ -138,7 +138,7 @@ class Config
 		}
 	}
 
-	protected function getTo(): DateTimeInterface
+	protected function getTo(): ?DateTimeInterface
 	{
 		return $this->to;
 	}

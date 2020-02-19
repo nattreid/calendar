@@ -117,18 +117,27 @@ class Day
 		return (string) $this->day;
 	}
 
-	public function is(DateTimeInterface $date): bool
+	public function is(?DateTimeInterface $date): bool
 	{
+		if ($date === null) {
+			return false;
+		}
 		return $this->format($date) === $this->format($this->date);
 	}
 
-	public function less(DateTimeInterface $date): bool
+	public function less(?DateTimeInterface $date): bool
 	{
+		if ($date === null) {
+			return false;
+		}
 		return $this->format($date) < $this->format($this->date);
 	}
 
-	public function more(DateTimeInterface $date): bool
+	public function more(?DateTimeInterface $date): bool
 	{
+		if ($date === null) {
+			return false;
+		}
 		return $this->format($date) > $this->format($this->date);
 	}
 }
