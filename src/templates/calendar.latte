@@ -25,7 +25,7 @@
                         $day->disabled ? disabled,
                         $day->is($config->from) || $day->is($config->to) ? selected,
                         $day->less($config->from) && $day->more($config->to) ? selection
-                        " data-date="{$day->formatDate}">{dump $config->from === $day->current}{dump $config->from}{dump $config->current}
+                        " data-date="{$day->formatDate}">
                         {if $hidden}
                             &nbsp;
                         {elseif $config->dayTemplate !== null}
