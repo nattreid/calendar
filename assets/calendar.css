@@ -26,7 +26,7 @@
 }
 .nattreid-calendar .month .cell {
   display: inline-block;
-  line-height: calc(30px - 1px);
+  line-height: 30px;
   width: 30px;
   height: 30px;
   text-align: center;
@@ -58,6 +58,7 @@
 .nattreid-calendar .month .days .day.hiddenCell {
   border-color: #fff !important;
   cursor: initial;
+  background-color: transparent !important;
 }
 .nattreid-calendar .month .days .day:hover {
   border-color: #ccc;

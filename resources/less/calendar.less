@@ -34,7 +34,7 @@
 
     .cell {
       display: inline-block;
-      line-height: calc(@size - 1px);
+      line-height: @size;
       width: @size;
       height: @size;
       text-align: center;
@@ -74,6 +74,7 @@
         &.hiddenCell {
           border-color: #fff !important;
           cursor: initial;
+          background-color: transparent !important;
         }
 
         &:hover {
