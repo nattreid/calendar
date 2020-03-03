@@ -138,10 +138,10 @@ class Calendar extends Control
 	 */
 	public function handleChangeMonth(): void
 	{
-		$position = (int) $this->presenter->getRequest()->getParameter('nattreidCalendarPosition');
+		$offset = (int) $this->presenter->getRequest()->getParameter('nattreidCalendarOffset');
 		if ($this->presenter->isAjax()) {
-			if (!$this->config->disableBeforeCurrent || $position >= 0) {
-				$this->config->offset = $position;
+			if (!$this->config->disableBeforeCurrent || $offset >= 0) {
+				$this->config->offset = $offset;
 				$this->redrawControl('container');
 			}
 		} else {
@@ -151,6 +151,10 @@ class Calendar extends Control
 
 	public function render(): void
 	{
+		if (!$this->presenter->isAjax()) {
+			$this->config->setOffsetToSelected();
+		}
+
 		$this->template->name = $this->name;
 		$this->template->addFilter('translate', [$this->config->translator, 'translate']);
 

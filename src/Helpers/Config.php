@@ -307,4 +307,10 @@ class Config
 		$this->dayTemplateArgs = $args;
 	}
 
+	public function setOffsetToSelected(): void
+	{
+		if ($this->from) {
+			$this->offset = $this->current->diff($this->from)->m;
+		}
+	}
 }

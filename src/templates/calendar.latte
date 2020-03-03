@@ -1,7 +1,9 @@
 <div id="{$name}">
     <div class="nattreid-calendar" n:snippet="container"
          data-handler="{link changeMonth}"
-         data-disable-before-current="{$config->disableBeforeCurrent ? 1 : 0}">
+         data-disable-before-current="{$config->disableBeforeCurrent ? 1 : 0}"
+         data-offset="{$config->offset}"
+    >
         <a class="prev">{$config->prev}</a>
         <div class="month" n:foreach="$months as $month">
             {var $isInner = !$iterator->isFirst() && !$iterator->isLast()}
@@ -25,7 +27,7 @@
                         $day->disabled ? disabled,
                         $day->is($config->from) || $day->is($config->to) ? selected,
                         $day->less($config->from) && $day->more($config->to) ? selection
-                        " data-date="{$day->formatDate}">
+                    " data-date="{$day->formatDate}">
                         {if $hidden}
                             &nbsp;
                         {elseif $config->dayTemplate !== null}

@@ -6,9 +6,9 @@
 
     $.fn.nattreidCalendar = function (options) {
         var _this = $(this);
-        var handler = $(this).find('.nattreid-calendar').data('handler');
-        var disableBeforeCurrent = $(this).find('.nattreid-calendar').data('disable-before-current');
-        var position = 0;
+        var handler = _this.find('.nattreid-calendar').data('handler');
+        var disableBeforeCurrent = _this.find('.nattreid-calendar').data('disable-before-current');
+        var offset = _this.find('.nattreid-calendar').data('offset');
         var selected = [];
 
         _this.find('.nattreid-calendar .day.selected').each(function(index, item){
@@ -39,7 +39,7 @@
             $.nette.ajax({
                 url: handler,
                 data: {
-                    nattreidCalendarPosition: position
+                    nattreidCalendarOffset: offset
                 }
             }).done(function () {
                 selected.forEach(function (item) {
@@ -125,15 +125,15 @@
         }
 
         $(this).on('click', '.nattreid-calendar a.prev', function () {
-            if (!disableBeforeCurrent || position > 0) {
-                --position;
+            if (!disableBeforeCurrent || offset > 0) {
+                --offset;
                 callAjax();
             }
             return false;
         });
 
         $(this).on('click', '.nattreid-calendar a.next', function () {
-            position++;
+            offset++;
             callAjax();
             return false;
         });
