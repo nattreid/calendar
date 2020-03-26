@@ -10,7 +10,9 @@ use Nattreid\Calendar\Helpers\Month;
 use NAttreid\Calendar\Lang\Translator;
 use Nette\Application\AbortException;
 use Nette\Application\UI\Control;
+use Nette\InvalidArgumentException;
 use Nette\Localization\ITranslator;
+use Nette\Utils\DateTime;
 
 /**
  * Class Calendar
@@ -99,6 +101,10 @@ class Calendar extends Control
 		return $this->config->translator;
 	}
 
+	/**
+	 * @param DateTimeInterface[] $disabled
+	 * @return $this
+	 */
 	public function setDisabledDays(array $disabled): self
 	{
 		$this->config->disabled = $disabled;
@@ -120,6 +126,21 @@ class Calendar extends Control
 
 	public function setSelected(DateTimeInterface $from, DateTimeInterface $to): void
 	{
+		$format = 'Y-m-d';
+		$now = new DateTime();
+		if ($this->config->disableBeforeCurrent) {
+			if ($from->format($format) < $now->format($format)) {
+				throw new InvalidArgumentException('Invalid selected date');
+			}
+			if ($to->format($format) < $now->format($format)) {
+				throw new InvalidArgumentException('Invalid selected date');
+			}
+		}
+		foreach ($this->config->disabled as $disabled) {
+			if ($from->format($format) <= $disabled->format($format) && $to->format($format) >= $disabled->format($format)) {
+				throw new InvalidArgumentException('Invalid selected date');
+			}
+		}
 		$this->config->from = $from;
 		$this->config->to = $to;
 	}
