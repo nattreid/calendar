@@ -11,8 +11,11 @@
         var offset = _this.find('.nattreid-calendar').data('offset');
         var selected = [];
 
-        _this.find('.nattreid-calendar .day.selected').each(function(index, item){
-            selected.push($(item).data('date'));
+        _this.find('.nattreid-calendar .day.selected').each(function (index, item) {
+            var obj = $(item);
+            if (!obj.hasClass('hiddenCell')) {
+                selected.push(obj.data('date'));
+            }
         });
 
         var opts = $.extend({}, {

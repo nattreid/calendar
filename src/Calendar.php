@@ -172,8 +172,11 @@ class Calendar extends Control
 
 	public function render(): void
 	{
+		$this->template->select = false;
+
 		if (!$this->presenter->isAjax()) {
 			$this->config->setOffsetToSelected();
+			$this->template->select = true;
 		}
 
 		$this->template->name = $this->name;

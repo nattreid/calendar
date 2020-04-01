@@ -1,7 +1,7 @@
 {
  "name": "nattreid-calendar",
  "description": "Calendar for Nette Framework",
- "version": "1.0.7",
+ "version": "1.0.8",
  "main": "./assets/calendar.js",
  "repository": {
   "type": "git",

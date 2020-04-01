@@ -25,8 +25,8 @@
                         $hidden ? hiddenCell,
                         $day->current ? current,
                         $day->disabled ? disabled,
-                        $day->is($config->from) || $day->is($config->to) ? selected,
-                        $day->less($config->from) && $day->more($config->to) ? selection
+                        $select && ($day->is($config->from) || $day->is($config->to)) ? selected,
+                        $select && $day->less($config->from) && $day->more($config->to) ? selection
                     " data-date="{$day->formatDate}">
                         {if $hidden}
                             &nbsp;
