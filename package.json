@@ -1,7 +1,7 @@
 {
  "name": "nattreid-calendar",
  "description": "Calendar for Nette Framework",
- "version": "1.0.9",
+ "version": "1.0.10",
  "main": "./assets/calendar.js",
  "repository": {
   "type": "git",
@@ -10,7 +10,7 @@
  "author": "Attreid",
  "license": "MIT",
  "dependencies": {
-  "jquery": "~3.4",
+  "jquery": "~3.5",
   "font-awesome": "~4.7",
   "nette.ajax.js": "~2.3"
  },
