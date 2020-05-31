@@ -187,7 +187,7 @@ class Calendar extends Control
 
 		$months = [];
 		for ($i = $this->config->offset; $i < $this->config->numberOfMonths + $this->config->offset; $i++) {
-			$date = $this->config->current;
+			$date = $this->config->current->modify('first day of this month');
 			if ($i !== 0) {
 				$date = $date->modify($i . ' MONTH');
 			}
