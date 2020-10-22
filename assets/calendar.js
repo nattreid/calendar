@@ -39,6 +39,8 @@
         }
 
         function callAjax() {
+            _this.find('.nattreid-calendar .spinner').addClass('active');
+            
             $.nette.ajax({
                 url: handler,
                 data: {
